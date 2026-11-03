@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menù del Bar di Francesco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Speakeasy notturno: inchiostro blu-petrolio, ottone, carta avorio. Colonna unica mobile-first, nav a sezioni fissa in alto. */
+  --ink: #0f1c22;
+  --panel: #16272f;
+  --line: #2a3f48;
+  --paper: #efe6d4;
+  --muted: #9fb0b3;
+  --brass: #d1a65a;
+  --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 640px; margin: 0 auto; padding: 0 18px 64px; }
+
+header { padding: 40px 0 22px; text-align: center; display: grid; gap: 6px; }
+header .kicker { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--brass); }
+header h1 {
+  font-family: var(--display); font-weight: 600; font-size: clamp(38px, 10vw, 54px);
+  line-height: 1; margin: 0; text-wrap: balance;
+}
+header p { margin: 4px auto 0; color: var(--muted); max-width: 40ch; font-size: 14px; }
+.rule { display: flex; align-items: center; gap: 10px; justify-content: center; color: var(--brass); margin-top: 10px; }
+.rule::before, .rule::after { content: ""; height: 1px; width: 60px; background: var(--brass); opacity: .5; }
+
+.controls {
+  position: sticky; top: 0; z-index: 5; background: var(--ink);
+  padding: 10px 0 12px; border-bottom: 1px solid var(--line); display: grid; gap: 10px;
+}
+.search {
+  width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--panel); color: var(--paper); font: inherit;
+}
+.search::placeholder { color: var(--muted); }
+.search:focus-visible, .chip:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; border: 1px solid var(--line); background: transparent; color: var(--paper);
+  font: 500 13px var(--body); padding: 7px 13px; border-radius: 999px; cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--brass); border-color: var(--brass); color: var(--ink); }
+
+section { padding-top: 30px; scroll-margin-top: 120px; }
+section > h2 {
+  font-family: var(--display); font-weight: 600; font-size: 30px; margin: 0;
+  display: flex; align-items: baseline; gap: 12px;
+}
+section > h2 .n { font-family: var(--body); font-size: 12px; color: var(--brass); letter-spacing: .1em; }
+section > .sub { margin: 2px 0 10px; color: var(--muted); font-size: 13.5px; }
+
+.item { padding: 14px 0; border-bottom: 1px dashed var(--line); display: grid; gap: 4px; }
+.item:last-child { border-bottom: 0; }
+.item .top { display: flex; align-items: baseline; gap: 10px; }
+.item h3 { font-family: var(--display); font-size: 22px; font-weight: 600; margin: 0; }
+.item .dots { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-5px); }
+.item .glass { font-size: 11.5px; color: var(--brass); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.item .price { font-family: var(--display); font-size: 21px; font-weight: 600; color: var(--brass); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.item .price::before { content: "€ "; font-size: 14px; }
+.item .ing { color: var(--muted); font-size: 14px; margin: 0; }
+.item .note { font-family: var(--display); font-style: italic; font-size: 16px; margin: 0; color: var(--paper); opacity: .85; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+.tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.tag.zero { border-color: #6fa58c; color: #9fd1b9; }
+.tag.strong { border-color: #b8745a; color: #e3a88f; }
+
+.list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+.list .item h3 { font-size: 19px; }
+@media (max-width: 420px) { .list { grid-template-columns: 1fr; } }
+
+.empty { display: none; text-align: center; color: var(--muted); padding: 40px 0; }
+footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 12.5px; }
+.hidden { display: none !important; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Drink list · Autunno 2026</div>
+    <h1>Il Bar di Francesco</h1>
+    <p>Cocktail, gin tonic, amari e distillati preparati con quello che c'è in bottigliera stasera.</p>
+    <div class="rule">✦</div>
+  </header>
+
+  <div class="controls">
+    <label for="q" class="hidden">Cerca nel menù</label>
+    <input id="q" class="search" type="search" placeholder="Cerca un drink o un ingrediente (es. gin, menta)">
+    <nav class="chips" id="chips" aria-label="Sezioni del menù"></nav>
+  </div>
+
+  <main id="menu"></main>
+  <p class="empty" id="empty">Nessun drink corrisponde alla ricerca. Prova con un altro ingrediente.</p>
+
+  <footer>Prezzi in euro, servizio e coperto inclusi.<br>Chiedi pure al barman per varianti, più o meno forte, o senza alcol.</footer>
+</div>
+
+<script>
+const MENU = [
+  { id: "signature", title: "Cocktail della casa", sub: "I preferiti del bancone", items: [
+    { n: "Moscow Mule", g: "Mug di rame", i: "Vodka, ginger beer, lime fresco, zenzero", note: "Con chips di zenzero e lime disidratati, glassati allo sciroppo Fabbri.", t: ["rinfrescante"] },
+    { n: "Penicillin", g: "Old fashioned", i: "Whisky di Segale, lime, zenzero fresco, sciroppo d'agave, float di Laphroaig 10", note: "Torbato in superficie, speziato sotto.", t: ["forte", "affumicato"] },
+    { n: "Paloma", g: "Highball", i: "Tequila Espolòn, Fever-Tree Pompelmo, lime, bordo di sale", t: ["rinfrescante"] },
+    { n: "Tokyo Iced Tea", g: "Highball", i: "Vodka, gin Roku, rum, tequila, Triple Sec, sciroppo di passion fruit, lime, lemon soda", t: ["forte"] },
+    { n: "Long Island Iced Tea", g: "Highball", i: "Vodka, gin, rum, tequila, Triple Sec, limone, Coca Cola", t: ["forte"] },
+  ]},
+  { id: "classici", title: "Classici", sub: "Le ricette di sempre", items: [
+    { n: "Negroni", g: "Old fashioned", i: "Gin, Campari, Vermouth Rosso, scorza d'arancia", t: ["forte", "amaro"] },
+    { n: "Americano", g: "Old fashioned", i: "Campari, Vermouth Rosso, seltz, arancia", t: ["amaro"] },
+    { n: "Margarita", g: "Coppetta", i: "Tequila Espolòn, Triple Sec, lime, bordo di sale", t: ["agrumato"] },
+    { n: "Mojito", g: "Highball", i: "Havana 3, menta fresca, lime, zucchero di canna, seltz", t: ["rinfrescante"] },
+    { n: "Daiquiri", g: "Coppetta", i: "Bacardi Carta Oro, lime, sciroppo di zucchero", t: ["agrumato"] },
+    { n: "Cuba Libre", g: "Highball", i: "Havana 3, Coca Cola, lime", t: [] },
+    { n: "Blue Lagoon", g: "Highball", i: "Vodka, Blue Curaçao, lemon soda, limone", t: ["rinfrescante"] },
+  ]},
+  { id: "spritz", title: "Spritz & aperitivi", sub: "Per iniziare la serata", items: [
+    { n: "Aperol Spritz", g: "Calice", i: "Aperol, Prosecco, seltz, fetta d'arancia", t: [] },
+    { n: "Campari Spritz", g: "Calice", i: "Campari, Prosecco, seltz, arancia", t: ["amaro"] },
+    { n: "Cynar Spritz", g: "Calice", i: "Cynar, Prosecco, seltz, limone", t: ["amaro"] },
+    { n: "Hugo", g: "Calice", i: "Sciroppo ai fiori di sambuco, Prosecco, seltz, menta, lime", t: ["floreale"] },
+    { n: "Violetta Fizz", g: "Calice", i: "Gin Malfy Pompelmo, sciroppo di violetta, limone, Prosecco", t: ["floreale"] },
+  ]},
+  { id: "gintonic", title: "Gin tonic", sub: "Abbinamenti consigliati gin, tonica e garnish", items: [
+    { n: "Hendrick's", g: "Balloon", i: "Fever-Tree Indian, cetriolo o pepe rosa", t: [] },
+    { n: "Gin Mare", g: "Balloon", i: "Fever-Tree Indian, rosmarino, scorza di limone", t: [] },
+    { n: "Roku", g: "Balloon", i: "Fever-Tree Indian, zenzero fresco", t: [] },
+    { n: "Malfy Pompelmo", g: "Balloon", i: "Fever-Tree Pompelmo, arancia", t: ["agrumato"] },
+    { n: "Tanqueray", g: "Highball", i: "Kinley, lime", t: [] },
+    { n: "Beefeater", g: "Highball", i: "Tassoni Superfine, limone", t: [] },
+    { n: "Silent Pool", g: "Balloon", i: "Fever-Tree Indian, mirtilli freschi", t: [] },
+    { n: "Gunpowder Irish", g: "Balloon", i: "Fever-Tree Indian, pompelmo", t: [] },
+    { n: "Illusionista", g: "Balloon", i: "Tonica neutra, limone: cambia colore nel bicchiere", t: [] },
+    { n: "Jrose", g: "Balloon", i: "Fever-Tree Indian, frutti di bosco", t: ["floreale"] },
+  ]},
+  { id: "distillati", title: "Rum & whisky", sub: "Lisci o con un cubetto", list: true, items: [
+    { n: "Zacapa 23", g: "Rum", i: "Guatemala", t: [] },
+    { n: "Don Papa", g: "Rum", i: "Filippine", t: [] },
+    { n: "Havana Club 3", g: "Rum", i: "Cuba", t: [] },
+    { n: "Bacardi Carta Oro", g: "Rum", i: "Porto Rico", t: [] },
+    { n: "Pampero", g: "Rum", i: "Venezuela", t: [] },
+    { n: "Laphroaig 10", g: "Whisky", i: "Islay, torbato", t: ["affumicato"] },
+    { n: "Jack Daniel's", g: "Whiskey", i: "Tennessee", t: [] },
+    { n: "Whisky di Segale", g: "Whisky", i: "Rye", t: [] },
+  ]},
+  { id: "amari", title: "Amari & digestivi", sub: "Per chiudere, anche con un occhio alle Marche", list: true, items: [
+    { n: "Varnelli", g: "Liquore", i: "Anice secco, Muccia", t: [] },
+    { n: "Meletti", g: "Liquore", i: "Anisetta, Ascoli Piceno", t: [] },
+    { n: "Amaro Montenegro", g: "Amaro", i: "Bologna", t: [] },
+    { n: "Vecchio Amaro del Capo", g: "Amaro", i: "Calabria, servito ghiacciato", t: [] },
+    { n: "Fernet", g: "Amaro", i: "Mentolato e deciso", t: ["amaro"] },
+    { n: "Unicum", g: "Amaro", i: "Ungheria", t: ["amaro"] },
+    { n: "Jägermeister", g: "Amaro", i: "Ghiacciato", t: [] },
+    { n: "Genziana", g: "Liquore", i: "Radice di genziana", t: ["amaro"] },
+    { n: "Cynar", g: "Amaro", i: "Carciofo", t: [] },
+    { n: "Limoncello", g: "Liquore", i: "Ghiacciato", t: [] },
+    { n: "Liquirizia", g: "Liquore", i: "Ghiacciato", t: [] },
+    { n: "Sambuca", g: "Liquore", i: "Con la mosca: tre chicchi di caffè", t: [] },
+    { n: "Baileys", g: "Crema", i: "Con ghiaccio", t: [] },
+  ]},
+  { id: "analcolici", title: "Analcolici", sub: "Tutto il gusto, zero gradi", items: [
+    { n: "Virgin Mule", g: "Mug di rame", i: "Ginger beer, lime, menta, zenzero", t: ["zero"] },
+    { n: "Nojito", g: "Highball", i: "Menta, lime, zucchero di canna, seltz", t: ["zero"] },
+    { n: "Sambuco Lemonade", g: "Highball", i: "Sciroppo fiori e bacche di sambuco, limone, seltz", t: ["zero", "floreale"] },
+    { n: "Passion Tonic", g: "Balloon", i: "Sciroppo di passion fruit, Fever-Tree Indian, lime", t: ["zero"] },
+    { n: "Rosso Granatina", g: "Highball", i: "Granatina, lemon soda, arancia", t: ["zero"] },
+    { n: "Crodino o San Pellegrino Cocktail", g: "Calice", i: "Con ghiaccio e fetta d'arancia", t: ["zero"] },
+    { n: "Bibite", g: "Bottiglia", i: "Chinotto, Cedrata, Coca Cola, Fanta, Lemon Soda, tè pesca o limone, succhi", t: ["zero"] },
+  ]},
+];
+
+const PRICES = {
+  "Moscow Mule": 8, "Penicillin": 10, "Paloma": 8, "Tokyo Iced Tea": 10, "Long Island Iced Tea": 10,
+  "Negroni": 8, "Americano": 7, "Margarita": 8, "Mojito": 8, "Daiquiri": 8, "Cuba Libre": 7, "Blue Lagoon": 7,
+  "Aperol Spritz": 6, "Campari Spritz": 6, "Cynar Spritz": 6, "Hugo": 6, "Violetta Fizz": 8,
+  "Hendrick's": 10, "Gin Mare": 11, "Roku": 10, "Malfy Pompelmo": 9, "Tanqueray": 8, "Beefeater": 7,
+  "Silent Pool": 11, "Gunpowder Irish": 10, "Illusionista": 10, "Jrose": 10,
+  "Zacapa 23": 9, "Don Papa": 8, "Havana Club 3": 5, "Bacardi Carta Oro": 5, "Pampero": 5,
+  "Laphroaig 10": 9, "Jack Daniel's": 6, "Whisky di Segale": 7,
+  "Baileys": 5,
+  "Virgin Mule": 6, "Nojito": 6, "Sambuco Lemonade": 5, "Passion Tonic": 6, "Rosso Granatina": 5,
+  "Crodino o San Pellegrino Cocktail": 4, "Bibite": 3,
+};
+const priceOf = (sec, it) => PRICES[it.n] ?? (sec.id === "amari" ? 4 : null);
+const fmt = p => p == null ? "" : p.toFixed(2).replace(".", ",");
+
+const TAG_LABEL ={ zero: "analcolico", forte: "forte" };
+const menuEl = document.getElementById("menu");
+const chipsEl = document.getElementById("chips");
+const q = document.getElementById("q");
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function render() {
+  menuEl.innerHTML = MENU.map(sec => `
+    <section id="${sec.id}" data-sec>
+      <h2>${esc(sec.title)} <span class="n">${String(sec.items.length).padStart(2, "0")}</span></h2>
+      <p class="sub">${esc(sec.sub)}</p>
+      <div class="${sec.list ? "list" : ""}">
+        ${sec.items.map(it => `
+          <article class="item" data-text="${esc((it.n + " " + it.i + " " + (it.note || "") + " " + it.t.join(" ")).toLowerCase())}">
+            <div class="top"><h3>${esc(it.n)}</h3><span class="dots"></span><span class="price">${fmt(priceOf(sec, it))}</span></div>
+            <p class="ing"><span class="glass">${esc(it.g)}</span> · ${esc(it.i)}</p>
+            ${it.note ? `<p class="note">${esc(it.note)}</p>` : ""}
+            ${it.t.length ? `<div class="tags">${it.t.map(t => `<span class="tag ${t === "zero" ? "zero" : t === "forte" ? "strong" : ""}">${TAG_LABEL[t] || t}</span>`).join("")}</div>` : ""}
+          </article>`).join("")}
+      </div>
+    </section>`).join("");
+
+  chipsEl.innerHTML = `<button class="chip" id="chip-all" aria-pressed="true" data-target="all">Tutto</button>` +
+    MENU.map(s => `<button class="chip" id="chip-${s.id}" aria-pressed="false" data-target="${s.id}">${esc(s.title)}</button>`).join("");
+}
+
+let active = "all";
+function apply() {
+  const term = q.value.trim().toLowerCase();
+  let shown = 0;
+  document.querySelectorAll("[data-sec]").forEach(sec => {
+    const secOk = active === "all" || sec.id === active;
+    let visible = 0;
+    sec.querySelectorAll(".item").forEach(it => {
+      const ok = secOk && (!term || it.dataset.text.includes(term));
+      it.classList.toggle("hidden", !ok);
+      if (ok) visible++;
+    });
+    sec.classList.toggle("hidden", visible === 0);
+    shown += visible;
+  });
+  document.getElementById("empty").style.display = shown ? "none" : "block";
+}
+
+render();
+chipsEl.addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  active = b.dataset.target;
+  chipsEl.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
+  apply();
+  window.scrollTo({ top: 0 });
+});
+q.addEventListener("input", apply);
+apply();
+</script>
+</body>
+</html>
