@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Menù del Bar di Francesco</title>
+<title>Caffè del Barrio · Menù</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300;0,400;0,600;1,300&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Speakeasy notturno: inchiostro blu-petrolio, ottone, carta avorio. Colonna unica mobile-first, nav a sezioni fissa in alto. */
-  --ink: #0f1c22;
-  --panel: #16272f;
-  --line: #2a3f48;
-  --paper: #efe6d4;
-  --muted: #9fb0b3;
-  --brass: #d1a65a;
-  --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  /* Caffè del Barrio: nero pieno e bianco come il logo, display geometrico sottile. Colonna unica mobile-first, nav a sezioni fissa in alto. */
+  --ink: #000000;
+  --panel: #111111;
+  --line: #2b2b2b;
+  --paper: #ffffff;
+  --muted: #a3a3a3;
+  --brass: #ffffff;
+  --display: "Josefin Sans", "Futura", "Century Gothic", system-ui, sans-serif;
   --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: dark;
 }
@@ -34,10 +34,9 @@ body {
 
 header { padding: 40px 0 22px; text-align: center; display: grid; gap: 6px; }
 header .kicker { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--brass); }
-header h1 {
-  font-family: var(--display); font-weight: 600; font-size: clamp(38px, 10vw, 54px);
-  line-height: 1; margin: 0; text-wrap: balance;
-}
+header h1 { margin: 0; }
+header .logo { display: block; width: min(220px, 60vw); height: auto; margin: 0 auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 header p { margin: 4px auto 0; color: var(--muted); max-width: 40ch; font-size: 14px; }
 .rule { display: flex; align-items: center; gap: 10px; justify-content: center; color: var(--brass); margin-top: 10px; }
 .rule::before, .rule::after { content: ""; height: 1px; width: 60px; background: var(--brass); opacity: .5; }
@@ -62,7 +61,7 @@ header p { margin: 4px auto 0; color: var(--muted); max-width: 40ch; font-size: 
 
 section { padding-top: 30px; scroll-margin-top: 120px; }
 section > h2 {
-  font-family: var(--display); font-weight: 600; font-size: 30px; margin: 0;
+  font-family: var(--display); font-weight: 300; font-size: 24px; letter-spacing: .04em; text-transform: uppercase; margin: 0;
   display: flex; align-items: baseline; gap: 12px;
 }
 section > h2 .n { font-family: var(--body); font-size: 12px; color: var(--brass); letter-spacing: .1em; }
@@ -71,13 +70,13 @@ section > .sub { margin: 2px 0 10px; color: var(--muted); font-size: 13.5px; }
 .item { padding: 14px 0; border-bottom: 1px dashed var(--line); display: grid; gap: 4px; }
 .item:last-child { border-bottom: 0; }
 .item .top { display: flex; align-items: baseline; gap: 10px; }
-.item h3 { font-family: var(--display); font-size: 22px; font-weight: 600; margin: 0; }
+.item h3 { font-family: var(--display); font-size: 20px; font-weight: 400; letter-spacing: .02em; margin: 0; }
 .item .dots { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-5px); }
-.item .glass { font-size: 11.5px; color: var(--brass); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
-.item .price { font-family: var(--display); font-size: 21px; font-weight: 600; color: var(--brass); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.item .glass { font-size: 11.5px; color: var(--paper); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.item .price { font-family: var(--display); font-size: 20px; font-weight: 400; color: var(--brass); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .item .price::before { content: "€ "; font-size: 14px; }
 .item .ing { color: var(--muted); font-size: 14px; margin: 0; }
-.item .note { font-family: var(--display); font-style: italic; font-size: 16px; margin: 0; color: var(--paper); opacity: .85; }
+.item .note { font-family: var(--display); font-style: italic; font-weight: 300; font-size: 16px; margin: 0; color: var(--paper); opacity: .85; }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
 .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
 .tag.zero { border-color: #6fa58c; color: #9fd1b9; }
@@ -96,9 +95,9 @@ footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 1
 <body>
 <div class="wrap">
   <header>
-    <div class="kicker">Drink list · Autunno 2026</div>
-    <h1>Il Bar di Francesco</h1>
-    <p>Cocktail, gin tonic, amari e distillati preparati con quello che c'è in bottigliera stasera.</p>
+    <h1><img class="logo" src="logo.png" alt="Caffè del Barrio, cocktails &amp; bar" width="434" height="434"><span class="sr-only">Caffè del Barrio</span></h1>
+    <div class="kicker">Drink list</div>
+    <p>Cocktail, gin tonic, spritz, amari e distillati.</p>
     <div class="rule">✦</div>
   </header>
 
