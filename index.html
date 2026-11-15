@@ -77,6 +77,9 @@ section > .sub { margin: 2px 0 10px; color: var(--muted); font-size: 13.5px; }
 .item .price::before { content: "€ "; font-size: 14px; }
 .item .ing { color: var(--muted); font-size: 14px; margin: 0; }
 .item .note { font-family: var(--display); font-style: italic; font-weight: 300; font-size: 16px; margin: 0; color: var(--paper); opacity: .85; }
+.sizes { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 6px; }
+.size { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 2px; text-align: center; color: var(--muted); font-size: 13px; }
+.size .price { font-size: 19px; }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
 .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
 .tag.zero { border-color: var(--paper); color: var(--paper); }
@@ -97,7 +100,7 @@ footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 1
   <header>
     <h1><img class="logo" src="logo.png" alt="Caffè del Barrio, cocktails &amp; bar" width="434" height="434"><span class="sr-only">Caffè del Barrio</span></h1>
     <div class="kicker">Drink list</div>
-    <p>Cocktail, gin tonic, spritz, amari e distillati.</p>
+    <p>Cocktail, gin tonic, spritz, birre e amari.</p>
     <div class="rule">✦</div>
   </header>
 
@@ -110,96 +113,88 @@ footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 1
   <main id="menu"></main>
   <p class="empty" id="empty">Nessun drink corrisponde alla ricerca. Prova con un altro ingrediente.</p>
 
-  <footer>Prezzi in euro, servizio e coperto inclusi.<br>Chiedi pure al barman per varianti, più o meno forte, o senza alcol.</footer>
+  <footer>Prezzi in euro.<br>Chiedi pure al barman per varianti o drink senza alcol.</footer>
 </div>
 
 <script>
 const MENU = [
-  { id: "signature", title: "Cocktail della casa", sub: "I preferiti del bancone", items: [
-    { n: "Moscow Mule", g: "Mug di rame", i: "Vodka, ginger beer, lime fresco, zenzero", note: "Con chips di zenzero e lime disidratati, glassati allo sciroppo Fabbri.", t: ["rinfrescante"] },
-    { n: "Penicillin", g: "Old fashioned", i: "Whisky di Segale, lime, zenzero fresco, sciroppo d'agave, float di Laphroaig 10", note: "Torbato in superficie, speziato sotto.", t: ["forte", "affumicato"] },
-    { n: "Paloma", g: "Highball", i: "Tequila Espolòn, Fever-Tree Pompelmo, lime, bordo di sale", t: ["rinfrescante"] },
-    { n: "Tokyo Iced Tea", g: "Highball", i: "Vodka, gin Roku, rum, tequila, Triple Sec, sciroppo di passion fruit, lime, lemon soda", t: ["forte"] },
-    { n: "Long Island Iced Tea", g: "Highball", i: "Vodka, gin, rum, tequila, Triple Sec, limone, Coca Cola", t: ["forte"] },
+  { id: "cocktail", title: "Cocktail", sub: "I classici del bancone", items: [
+    { n: "Negroni", p: 8, g: "Old fashioned", i: "Gin, Campari, Vermouth rosso, scorza d'arancia", t: ["forte"] },
+    { n: "Americano", p: 8, g: "Old fashioned", i: "Campari, Vermouth rosso, soda, arancia", t: [] },
+    { n: "Boulevardier", p: 10, g: "Old fashioned", i: "Bourbon, Campari, Vermouth rosso", t: ["forte"] },
+    { n: "Campari shakerato", p: 8, g: "Coppetta", i: "Campari shakerato con ghiaccio", t: [] },
+    { n: "Margarita", p: 8, g: "Coppetta", i: "Tequila, Triple Sec, lime, bordo di sale", t: [] },
+    { n: "Daiquiri", p: 8, g: "Coppetta", i: "Rum, lime, zucchero", t: [] },
+    { n: "Mojito", p: 7, g: "Highball", i: "Rum bianco, menta fresca, lime, zucchero di canna, soda", t: [] },
+    { n: "Cuba Libre", p: 7, g: "Highball", i: "Rum, Coca Cola, lime", t: [] },
+    { n: "Gin Fizz", p: 7, g: "Highball", i: "Gin, limone, zucchero, soda", t: [] },
+    { n: "Blue Lagoon", p: 7, g: "Highball", i: "Vodka, Blue Curaçao, lemon soda", t: [] },
+    { n: "Piña Colada", p: 8, g: "Tumbler", i: "Rum, ananas, crema di cocco", t: [] },
+    { n: "Tequila Sunrise", p: 8, g: "Highball", i: "Tequila, succo d'arancia, granatina", t: [] },
+    { n: "Cocktail analcolico", p: 6, i: "Chiedi al barman la proposta del giorno", t: ["zero"] },
   ]},
-  { id: "classici", title: "Classici", sub: "Le ricette di sempre", items: [
-    { n: "Negroni", g: "Old fashioned", i: "Gin, Campari, Vermouth Rosso, scorza d'arancia", t: ["forte", "amaro"] },
-    { n: "Americano", g: "Old fashioned", i: "Campari, Vermouth Rosso, seltz, arancia", t: ["amaro"] },
-    { n: "Margarita", g: "Coppetta", i: "Tequila Espolòn, Triple Sec, lime, bordo di sale", t: ["agrumato"] },
-    { n: "Mojito", g: "Highball", i: "Havana 3, menta fresca, lime, zucchero di canna, seltz", t: ["rinfrescante"] },
-    { n: "Daiquiri", g: "Coppetta", i: "Bacardi Carta Oro, lime, sciroppo di zucchero", t: ["agrumato"] },
-    { n: "Cuba Libre", g: "Highball", i: "Havana 3, Coca Cola, lime", t: [] },
-    { n: "Blue Lagoon", g: "Highball", i: "Vodka, Blue Curaçao, lemon soda, limone", t: ["rinfrescante"] },
+  { id: "spritz", title: "Spritz e aperitivi", sub: "Per iniziare la serata", items: [
+    { n: "Aperol Spritz", p: 5, g: "Calice", i: "Aperol, Prosecco, soda, arancia", t: [] },
+    { n: "Campari Spritz", p: 5, g: "Calice", i: "Campari, Prosecco, soda, arancia", t: [] },
+    { n: "Cynar Spritz", p: 5, g: "Calice", i: "Cynar, Prosecco, soda, limone", t: [] },
+    { n: "Hugo", p: 5, g: "Calice", i: "Sciroppo di sambuco, Prosecco, soda, menta, lime", t: [] },
+    { n: "Hugo Rosa", p: 5, g: "Calice", i: "La versione rosa dell'Hugo", t: [] },
+    { n: "Campari e Prosecco", p: 3.5, i: "", t: [] },
+    { n: "Campari", p: 3, i: "", t: [] },
+    { n: "Crodino", p: 3.5, i: "", t: ["zero"] },
+    { n: "Cocktail San Pellegrino", p: 3, i: "", t: ["zero"] },
+    { n: "Calice di vino", p: 5, i: "", t: [] },
   ]},
-  { id: "spritz", title: "Spritz & aperitivi", sub: "Per iniziare la serata", items: [
-    { n: "Aperol Spritz", g: "Calice", i: "Aperol, Prosecco, seltz, fetta d'arancia", t: [] },
-    { n: "Campari Spritz", g: "Calice", i: "Campari, Prosecco, seltz, arancia", t: ["amaro"] },
-    { n: "Cynar Spritz", g: "Calice", i: "Cynar, Prosecco, seltz, limone", t: ["amaro"] },
-    { n: "Hugo", g: "Calice", i: "Sciroppo ai fiori di sambuco, Prosecco, seltz, menta, lime", t: ["floreale"] },
-    { n: "Violetta Fizz", g: "Calice", i: "Gin Malfy Pompelmo, sciroppo di violetta, limone, Prosecco", t: ["floreale"] },
+  { id: "gintonic", title: "Gin tonic", sub: "Scegli il gin, al resto pensiamo noi", list: true, items: [
+    { n: "Beefeater", p: 6, i: "", t: [] },
+    { n: "Tanqueray", p: 7, i: "", t: [] },
+    { n: "Gin Mare", p: 7, i: "", t: [] },
+    { n: "Roku", p: 7, i: "", t: [] },
+    { n: "Malfy Pompelmo", p: 7, i: "", t: [] },
+    { n: "The East India Company", p: 7, i: "", t: [] },
+    { n: "Hendrick's", p: 8, i: "", t: [] },
+    { n: "Santa Ana", p: 8, i: "", t: [] },
+    { n: "Tavrvs", p: 8, i: "", t: [] },
+    { n: "Jrose", p: 9, i: "", t: [] },
+    { n: "Knut Hansen", p: 9, i: "", t: [] },
+    { n: "Saigon Baigur", p: 9, i: "", t: [] },
+    { n: "Amuerte", p: 11, i: "", t: [] },
   ]},
-  { id: "gintonic", title: "Gin tonic", sub: "Abbinamenti consigliati gin, tonica e garnish", items: [
-    { n: "Hendrick's", g: "Balloon", i: "Fever-Tree Indian, cetriolo o pepe rosa", t: [] },
-    { n: "Gin Mare", g: "Balloon", i: "Fever-Tree Indian, rosmarino, scorza di limone", t: [] },
-    { n: "Roku", g: "Balloon", i: "Fever-Tree Indian, zenzero fresco", t: [] },
-    { n: "Malfy Pompelmo", g: "Balloon", i: "Fever-Tree Pompelmo, arancia", t: ["agrumato"] },
-    { n: "Tanqueray", g: "Highball", i: "Kinley, lime", t: [] },
-    { n: "Beefeater", g: "Highball", i: "Tassoni Superfine, limone", t: [] },
-    { n: "Silent Pool", g: "Balloon", i: "Fever-Tree Indian, mirtilli freschi", t: [] },
-    { n: "Gunpowder Irish", g: "Balloon", i: "Fever-Tree Indian, pompelmo", t: [] },
-    { n: "Illusionista", g: "Balloon", i: "Tonica neutra, limone: cambia colore nel bicchiere", t: [] },
-    { n: "Jrose", g: "Balloon", i: "Fever-Tree Indian, frutti di bosco", t: ["floreale"] },
+  { id: "distillati", title: "Rum e whisky", sub: "Lisci o con ghiaccio", list: true, items: [
+    { n: "Bacardi Carta Oro", p: 4, g: "Rum", t: [] },
+    { n: "Pampero", p: 4, g: "Rum", t: [] },
+    { n: "Don Papa", p: 5, g: "Rum", t: [] },
+    { n: "Matusalem", p: 5, g: "Rum", t: [] },
+    { n: "Jack Daniel's", p: 4, g: "Whiskey", t: [] },
+    { n: "Laphroaig 10", p: 6, g: "Whisky", t: [] },
+    { n: "Talisker 10", p: 6, g: "Whisky", t: [] },
+    { n: "Knob Creek 9", p: 6, g: "Bourbon", t: [] },
   ]},
-  { id: "distillati", title: "Rum & whisky", sub: "Lisci o con un cubetto", list: true, items: [
-    { n: "Zacapa 23", g: "Rum", i: "Guatemala", t: [] },
-    { n: "Don Papa", g: "Rum", i: "Filippine", t: [] },
-    { n: "Havana Club 3", g: "Rum", i: "Cuba", t: [] },
-    { n: "Bacardi Carta Oro", g: "Rum", i: "Porto Rico", t: [] },
-    { n: "Pampero", g: "Rum", i: "Venezuela", t: [] },
-    { n: "Laphroaig 10", g: "Whisky", i: "Islay, torbato", t: ["affumicato"] },
-    { n: "Jack Daniel's", g: "Whiskey", i: "Tennessee", t: [] },
-    { n: "Whisky di Segale", g: "Whisky", i: "Rye", t: [] },
+  { id: "amari", title: "Amari e digestivi", sub: "Per chiudere in bellezza", list: true, items: [
+    { n: "Anisetta Meletti", p: 3 }, { n: "Varnelli", p: 3 }, { n: "Sambuca Molinari", p: 3 },
+    { n: "Amaro Montenegro", p: 3 }, { n: "Vecchio Amaro del Capo", p: 3 }, { n: "Vecchio Amaro del Capo Piccante", p: 3 },
+    { n: "Fernet", p: 3 }, { n: "Brancamenta", p: 3 }, { n: "Cynar", p: 3 }, { n: "Unicum", p: 3 },
+    { n: "Jägermeister", p: 3 }, { n: "Genziana", p: 3 }, { n: "Vecchia Romagna", p: 3 }, { n: "Baileys", p: 3 },
+    { n: "Punch al rum", p: 3 }, { n: "Punch al mandarino", p: 3 }, { n: "Punch al cioccolato", p: 3 },
+    { n: "Limoncello", p: 3 }, { n: "Liquirizia", p: 3 },
+    { n: "Grappa bianca", p: 4 }, { n: "Grappa barricata", p: 4 },
   ]},
-  { id: "amari", title: "Amari & digestivi", sub: "Per chiudere, anche con un occhio alle Marche", list: true, items: [
-    { n: "Varnelli", g: "Liquore", i: "Anice secco, Muccia", t: [] },
-    { n: "Meletti", g: "Liquore", i: "Anisetta, Ascoli Piceno", t: [] },
-    { n: "Amaro Montenegro", g: "Amaro", i: "Bologna", t: [] },
-    { n: "Vecchio Amaro del Capo", g: "Amaro", i: "Calabria, servito ghiacciato", t: [] },
-    { n: "Fernet", g: "Amaro", i: "Mentolato e deciso", t: ["amaro"] },
-    { n: "Unicum", g: "Amaro", i: "Ungheria", t: ["amaro"] },
-    { n: "Jägermeister", g: "Amaro", i: "Ghiacciato", t: [] },
-    { n: "Genziana", g: "Liquore", i: "Radice di genziana", t: ["amaro"] },
-    { n: "Cynar", g: "Amaro", i: "Carciofo", t: [] },
-    { n: "Limoncello", g: "Liquore", i: "Ghiacciato", t: [] },
-    { n: "Liquirizia", g: "Liquore", i: "Ghiacciato", t: [] },
-    { n: "Sambuca", g: "Liquore", i: "Con la mosca: tre chicchi di caffè", t: [] },
-    { n: "Baileys", g: "Crema", i: "Con ghiaccio", t: [] },
+  { id: "spina", title: "Birre alla spina", sub: "Forst Premium bionda o Forst Sixtus rossa doppio malto", items: [
+    { n: "Forst", sizes: [["0,2 l", 3], ["0,3 l", 3.5], ["0,4 l", 4.5], ["0,5 l", 5.5], ["1 l", 12]] },
   ]},
-  { id: "analcolici", title: "Analcolici", sub: "Tutto il gusto, zero gradi", items: [
-    { n: "Virgin Mule", g: "Mug di rame", i: "Ginger beer, lime, menta, zenzero", t: ["zero"] },
-    { n: "Nojito", g: "Highball", i: "Menta, lime, zucchero di canna, seltz", t: ["zero"] },
-    { n: "Sambuco Lemonade", g: "Highball", i: "Sciroppo fiori e bacche di sambuco, limone, seltz", t: ["zero", "floreale"] },
-    { n: "Passion Tonic", g: "Balloon", i: "Sciroppo di passion fruit, Fever-Tree Indian, lime", t: ["zero"] },
-    { n: "Rosso Granatina", g: "Highball", i: "Granatina, lemon soda, arancia", t: ["zero"] },
-    { n: "Crodino o San Pellegrino Cocktail", g: "Calice", i: "Con ghiaccio e fetta d'arancia", t: ["zero"] },
-    { n: "Bibite", g: "Bottiglia", i: "Chinotto, Cedrata, Coca Cola, Fanta, Lemon Soda, tè pesca o limone, succhi", t: ["zero"] },
+  { id: "bottiglia", title: "Birre in bottiglia", sub: "", list: true, items: [
+    { n: "Moretti 0,66 l", p: 3.5 }, { n: "Ceres", p: 3.5 }, { n: "Heineken", p: 3.5 }, { n: "Raffo non filtrata", p: 3.5 },
+    { n: "Hoegaarden", p: 3.5 }, { n: "Corona", p: 3.5 }, { n: "Corona 0,0", p: 3.5, t: ["zero"] }, { n: "Tennent's", p: 3.5 },
+    { n: "Beck's", p: 3 }, { n: "Peroni", p: 3 },
+  ]},
+  { id: "bibite", title: "Bibite e lattine", sub: "", list: true, items: [
+    { n: "Acqua 0,5 l", p: 1 }, { n: "Acqua 1,5 l", p: 2 }, { n: "Sveva", p: 1 },
+    { n: "Coca Cola", p: 2.5 }, { n: "Fanta", p: 2.5 }, { n: "Sprite", p: 2.5 }, { n: "Tè pesca o limone, lattina", p: 2.5 },
+    { n: "Estathé", p: 1.5 }, { n: "Red Bull", p: 3 }, { n: "Cedrata", p: 3 }, { n: "Chinotto", p: 3 },
+    { n: "Acqua tonica", p: 3 }, { n: "Soda al limone", p: 3 }, { n: "Ginger beer", p: 3 },
   ]},
 ];
-
-const PRICES = {
-  "Moscow Mule": 8, "Penicillin": 10, "Paloma": 8, "Tokyo Iced Tea": 10, "Long Island Iced Tea": 10,
-  "Negroni": 8, "Americano": 7, "Margarita": 8, "Mojito": 8, "Daiquiri": 8, "Cuba Libre": 7, "Blue Lagoon": 7,
-  "Aperol Spritz": 6, "Campari Spritz": 6, "Cynar Spritz": 6, "Hugo": 6, "Violetta Fizz": 8,
-  "Hendrick's": 10, "Gin Mare": 11, "Roku": 10, "Malfy Pompelmo": 9, "Tanqueray": 8, "Beefeater": 7,
-  "Silent Pool": 11, "Gunpowder Irish": 10, "Illusionista": 10, "Jrose": 10,
-  "Zacapa 23": 9, "Don Papa": 8, "Havana Club 3": 5, "Bacardi Carta Oro": 5, "Pampero": 5,
-  "Laphroaig 10": 9, "Jack Daniel's": 6, "Whisky di Segale": 7,
-  "Baileys": 5,
-  "Virgin Mule": 6, "Nojito": 6, "Sambuco Lemonade": 5, "Passion Tonic": 6, "Rosso Granatina": 5,
-  "Crodino o San Pellegrino Cocktail": 4, "Bibite": 3,
-};
-const priceOf = (sec, it) => PRICES[it.n] ?? (sec.id === "amari" ? 4 : null);
-const fmt = p => p == null ? "" : p.toFixed(2).replace(".", ",");
+const fmt = p => p == null ? "" : (Number.isInteger(p) ? String(p) : p.toFixed(2).replace(".", ","));
 
 const TAG_LABEL ={ zero: "analcolico", forte: "forte" };
 const menuEl = document.getElementById("menu");
@@ -211,14 +206,15 @@ function render() {
   menuEl.innerHTML = MENU.map(sec => `
     <section id="${sec.id}" data-sec>
       <h2>${esc(sec.title)} <span class="n">${String(sec.items.length).padStart(2, "0")}</span></h2>
-      <p class="sub">${esc(sec.sub)}</p>
+      ${sec.sub ? `<p class="sub">${esc(sec.sub)}</p>` : ""}
       <div class="${sec.list ? "list" : ""}">
         ${sec.items.map(it => `
-          <article class="item" data-text="${esc((it.n + " " + it.i + " " + (it.note || "") + " " + it.t.join(" ")).toLowerCase())}">
-            <div class="top"><h3>${esc(it.n)}</h3><span class="dots"></span><span class="price">${fmt(priceOf(sec, it))}</span></div>
-            <p class="ing"><span class="glass">${esc(it.g)}</span> · ${esc(it.i)}</p>
+          <article class="item" data-text="${esc((it.n + " " + (it.i || "") + " " + (it.g || "") + " " + (it.t || []).join(" ")).toLowerCase())}">
+            <div class="top"><h3>${esc(it.n)}</h3><span class="dots"></span>${it.p != null ? `<span class="price">${fmt(it.p)}</span>` : ""}</div>
+            ${(it.g || it.i) ? `<p class="ing">${it.g ? `<span class="glass">${esc(it.g)}</span>` : ""}${it.g && it.i ? " · " : ""}${esc(it.i || "")}</p>` : ""}
+            ${it.sizes ? `<div class="sizes">${it.sizes.map(([l, p]) => `<div class="size"><span>${l}</span><span class="price">${fmt(p)}</span></div>`).join("")}</div>` : ""}
             ${it.note ? `<p class="note">${esc(it.note)}</p>` : ""}
-            ${it.t.length ? `<div class="tags">${it.t.map(t => `<span class="tag ${t === "zero" ? "zero" : t === "forte" ? "strong" : ""}">${TAG_LABEL[t] || t}</span>`).join("")}</div>` : ""}
+            ${(it.t || []).length ? `<div class="tags">${it.t.map(t => `<span class="tag ${t === "zero" ? "zero" : t === "forte" ? "strong" : ""}">${TAG_LABEL[t] || t}</span>`).join("")}</div>` : ""}
           </article>`).join("")}
       </div>
     </section>`).join("");
