@@ -49,6 +49,9 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px 48px; }
 .hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,.35) 0%, rgba(0,0,0,.85) 70%); }
 .hero-text { position: relative; z-index: 1; padding: 0 20px; display: grid; gap: 8px; }
 .hero h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(30px, 8.5vw, 44px); letter-spacing: .06em; text-transform: uppercase; line-height: 1.05; text-wrap: balance; }
+.hero-cat { height: 150px; }
+.hero.hero-cat h1 { font-weight: 700; font-size: clamp(26px, 7.5vw, 36px); }
+.hero.hero-cat p { letter-spacing: .02em; text-transform: none; font-family: var(--body); font-size: 14px; color: #cfcfcf; }
 .hero p { margin: 0; font-family: var(--display); font-weight: 300; font-size: 15px; letter-spacing: .35em; text-transform: lowercase; color: #dcdcdc; }
 
 .cats { display: grid; gap: 22px; padding-top: 6px; }
@@ -66,7 +69,7 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px 48px; }
 .cat-head { padding: 10px 2px 16px; display: grid; gap: 2px; }
 .cat-head h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 28px; letter-spacing: .04em; text-transform: uppercase; text-wrap: balance; }
 .cat-head p { margin: 0; color: var(--muted); }
-.items { display: grid; gap: 14px; }
+.items { display: grid; gap: 14px; padding-top: 6px; }
 .item { background: var(--card); border-radius: 18px; padding: 20px 20px 22px; display: grid; gap: 8px; }
 .item.compact { padding: 16px 20px; }
 .item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
@@ -108,12 +111,18 @@ footer { max-width: 640px; margin: 0 auto; padding: 8px 16px 40px; text-align: c
   </section>
 </div>
 
+<div class="view" id="cat-hero" hidden>
+  <section class="hero hero-cat">
+    <div class="hero-text"><h1 id="cat-title"></h1><p id="cat-sub"></p></div>
+  </section>
+</div>
+
 <nav class="pills" aria-label="Categorie"><div class="pills-inner" id="pills"></div></nav>
 
 <main>
   <div class="view" id="home"><div class="cats" id="cats"></div></div>
   <div class="view" id="category" hidden>
-    <div class="cat-head"><h2 id="cat-title"></h2><p id="cat-sub"></p></div>
+
     <div class="items" id="items"></div>
   </div>
 </main>
@@ -228,7 +237,7 @@ const price = p => { const [e, c] = p.toFixed(2).split("."); return `€ ${e}<su
 const TAG = { zero: "analcolico", forte: "forte" };
 
 const pillsEl = document.getElementById("pills");
-pillsEl.innerHTML = MENU.map(s => `<button class="pill" type="button" data-id="${s.id}">${esc(s.title)}</button>`).join("");
+pillsEl.innerHTML = `<button class="pill" type="button" data-home="1">Menu</button>` + MENU.map(s => `<button class="pill" type="button" data-id="${s.id}">${esc(s.title)}</button>`).join("");
 document.getElementById("cats").innerHTML = MENU.map(s => `
   <button class="cat" type="button" data-id="${s.id}">
     <div class="cat-art" aria-hidden="true"><div class="badge"><svg viewBox="0 0 64 64">${ICONS[s.id] || ICONS.cocktail}</svg></div></div>
@@ -258,7 +267,9 @@ function show() {
   document.getElementById("home").hidden = !!sec;
   document.getElementById("home-hero").hidden = !!sec;
   document.getElementById("category").hidden = !sec;
-  pillsEl.querySelectorAll(".pill").forEach(b => b.setAttribute("aria-current", String(!!sec && b.dataset.id === sec.id)));
+  document.getElementById("cat-hero").hidden = !sec;
+  pillsEl.querySelectorAll(".pill").forEach(b => b.setAttribute("aria-current", String(sec ? b.dataset.id === sec.id : !!b.dataset.home)));
+  if (!sec) pillsEl.scrollTo({ left: 0, behavior: "smooth" });
   if (sec) {
     document.getElementById("cat-title").textContent = sec.title;
     document.getElementById("cat-sub").textContent = sec.sub || "";
@@ -270,10 +281,13 @@ function show() {
 }
 const go = id => { if (location.hash.slice(1) === id) show(); else location.hash = id; };
 document.addEventListener("click", e => {
+  if (e.target.closest("[data-home]")) { goHome(); return; }
   const t = e.target.closest("[data-id]"); if (t) go(t.dataset.id);
 });
-document.getElementById("back").addEventListener("click", () => { history.replaceState(null, "", location.pathname); show(); });
-document.getElementById("brand").addEventListener("click", () => { history.replaceState(null, "", location.pathname); show(); });
+function goHome() { if (location.hash) history.pushState(null, "", location.pathname); show(); }
+document.getElementById("back").addEventListener("click", goHome);
+document.getElementById("brand").addEventListener("click", goHome);
+window.addEventListener("popstate", show);
 window.addEventListener("hashchange", show);
 show();
 </script>
