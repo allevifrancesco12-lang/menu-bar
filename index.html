@@ -6,115 +6,118 @@
 <title>Caffè del Barrio · Menù</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300;0,400;0,600;1,300&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Caffè del Barrio: nero pieno e bianco come il logo, display geometrico sottile. Colonna unica mobile-first, nav a sezioni fissa in alto. */
+  /* Caffè del Barrio: nero e bianco come il logo. Home a schede di categoria, vista categoria a card; pillole sempre in alto. */
   --ink: #000000;
-  --panel: #111111;
-  --line: #2b2b2b;
+  --bar: #0c0c0c;
+  --card: #141414;
+  --line: #333333;
   --paper: #ffffff;
-  --muted: #a3a3a3;
-  --brass: #ffffff;
+  --muted: #a8a8a8;
   --display: "Josefin Sans", "Futura", "Century Gothic", system-ui, sans-serif;
   --body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-body {
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--body);
-  font-size: 15px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-.wrap { max-width: 640px; margin: 0 auto; padding: 0 18px 64px; }
+body { background: var(--ink); color: var(--paper); font-family: var(--body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
 
-header { padding: 40px 0 22px; text-align: center; display: grid; gap: 6px; }
-header .kicker { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--brass); }
-header h1 { margin: 0; }
-header .logo { display: block; width: min(220px, 60vw); height: auto; margin: 0 auto; }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-header p { margin: 4px auto 0; color: var(--muted); max-width: 40ch; font-size: 14px; }
-.rule { display: flex; align-items: center; gap: 10px; justify-content: center; color: var(--brass); margin-top: 10px; }
-.rule::before, .rule::after { content: ""; height: 1px; width: 60px; background: var(--brass); opacity: .5; }
+/* Barra in alto */
+.topbar { position: sticky; top: 0; z-index: 10; background: var(--bar); border-bottom: 1px solid #1d1d1d; }
+.topbar-inner { max-width: 640px; margin: 0 auto; height: 78px; display: grid; grid-template-columns: 80px 1fr 80px; align-items: center; padding: 0 12px; }
+.back { display: flex; visibility: hidden; flex-direction: column; align-items: center; gap: 2px; background: none; border: 0; cursor: pointer; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 6px; border-radius: 10px; }
+.back svg { width: 24px; height: 24px; stroke: var(--paper); }
+body.in-cat .back { visibility: visible; }
+.brand { justify-self: center; display: block; line-height: 0; background: none; border: 0; padding: 0; cursor: pointer; }
+.brand img { height: 64px; width: auto; }
 
-.controls {
-  position: sticky; top: 0; z-index: 5; background: var(--ink);
-  padding: 10px 0 12px; border-bottom: 1px solid var(--line); display: grid; gap: 10px;
-}
-.search {
-  width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line);
-  background: var(--panel); color: var(--paper); font: inherit;
-}
-.search::placeholder { color: var(--muted); }
-.search:focus-visible, .chip:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
-.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-.chips::-webkit-scrollbar { display: none; }
-.chip {
-  flex: none; border: 1px solid var(--line); background: transparent; color: var(--paper);
-  font: 500 13px var(--body); padding: 7px 13px; border-radius: 999px; cursor: pointer;
-}
-.chip[aria-pressed="true"] { background: var(--brass); border-color: var(--brass); color: var(--ink); }
+/* Pillole categorie */
+.pills { position: sticky; top: 78px; z-index: 9; background: var(--ink); }
+.pills-inner { max-width: 640px; margin: 0 auto; display: flex; gap: 10px; overflow-x: auto; padding: 14px 16px; scrollbar-width: none; }
+.pills-inner::-webkit-scrollbar { display: none; }
+.pill { flex: none; border: 2px solid var(--line); background: #1a1a1a; border-radius: 999px; padding: 10px 20px; font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; white-space: nowrap; line-height: 1.2; padding-top: 12px; }
+.pill[aria-current="true"] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
 
-section { padding-top: 30px; scroll-margin-top: 120px; }
-section > h2 {
-  font-family: var(--display); font-weight: 300; font-size: 24px; letter-spacing: .04em; text-transform: uppercase; margin: 0;
-  display: flex; align-items: baseline; gap: 12px;
-}
-section > h2 .n { font-family: var(--body); font-size: 12px; color: var(--brass); letter-spacing: .1em; }
-section > .sub { margin: 2px 0 10px; color: var(--muted); font-size: 13.5px; }
+main { max-width: 640px; margin: 0 auto; padding: 4px 16px 48px; }
 
-.item { padding: 14px 0; border-bottom: 1px dashed var(--line); display: grid; gap: 4px; }
-.item:last-child { border-bottom: 0; }
-.item .top { display: flex; align-items: baseline; gap: 10px; }
-.item h3 { font-family: var(--display); font-size: 20px; font-weight: 400; letter-spacing: .02em; margin: 0; }
-.item .dots { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-5px); }
-.item .glass { font-size: 11.5px; color: var(--paper); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
-.item .price { font-family: var(--display); font-size: 20px; font-weight: 400; color: var(--brass); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.item .price::before { content: "€ "; font-size: 14px; }
-.item .ing { color: var(--muted); font-size: 14px; margin: 0; }
-.item .note { font-family: var(--display); font-style: italic; font-weight: 300; font-size: 16px; margin: 0; color: var(--paper); opacity: .85; }
-.sizes { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 6px; }
-.size { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 2px; text-align: center; color: var(--muted); font-size: 13px; }
-.size .price { font-size: 19px; }
-.tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
-.tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
-.tag.zero { border-color: var(--paper); color: var(--paper); }
-.tag.strong { border-color: var(--paper); color: var(--paper); }
+/* Home */
+.hero { position: relative; max-width: 640px; margin: 0 auto; height: 220px; display: grid; place-items: center; text-align: center; overflow: hidden; background-color: #050505; background-image: var(--pattern); background-size: 260px auto; }
+.hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,0,0,.35) 0%, rgba(0,0,0,.85) 70%); }
+.hero-text { position: relative; z-index: 1; padding: 0 20px; display: grid; gap: 8px; }
+.hero h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(30px, 8.5vw, 44px); letter-spacing: .06em; text-transform: uppercase; line-height: 1.05; text-wrap: balance; }
+.hero p { margin: 0; font-family: var(--display); font-weight: 300; font-size: 15px; letter-spacing: .35em; text-transform: lowercase; color: #dcdcdc; }
 
-.list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
-.list .item h3 { font-size: 19px; }
-@media (max-width: 420px) { .list { grid-template-columns: 1fr; } }
+.cats { display: grid; gap: 22px; padding-top: 6px; }
+.cat { display: block; width: 100%; text-align: center; padding: 0; border: 0; background: var(--card); border-radius: 18px; overflow: hidden; cursor: pointer; }
+.cat-art { position: relative; height: 128px; background-color: #000; background-image: var(--pattern); background-size: 260px auto; display: grid; place-items: center; }
+.cat-art .badge { width: 74px; height: 74px; border-radius: 50%; background: #000; border: 1px solid #3a3a3a; display: grid; place-items: center; }
+.cat-art .badge svg { width: 44px; height: 44px; stroke: var(--paper); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.cat-body { padding: 22px 18px 26px; display: grid; gap: 6px; }
+.cat-title { font-family: var(--display); font-weight: 700; font-size: 26px; letter-spacing: .04em; text-transform: uppercase; display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-wrap: balance; }
+.cat-title svg { width: 18px; height: 18px; stroke: var(--paper); flex: none; transform: translateY(-2px); }
+.cat-sub { color: var(--muted); font-size: 15px; }
+.cat-count { font-size: 12px; color: #777; letter-spacing: .08em; text-transform: uppercase; }
 
-.empty { display: none; text-align: center; color: var(--muted); padding: 40px 0; }
-footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 12.5px; }
-.hidden { display: none !important; }
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+/* Categoria */
+.cat-head { padding: 10px 2px 16px; display: grid; gap: 2px; }
+.cat-head h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 28px; letter-spacing: .04em; text-transform: uppercase; text-wrap: balance; }
+.cat-head p { margin: 0; color: var(--muted); }
+.items { display: grid; gap: 14px; }
+.item { background: var(--card); border-radius: 18px; padding: 20px 20px 22px; display: grid; gap: 8px; }
+.item.compact { padding: 16px 20px; }
+.item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.item h3 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 21px; letter-spacing: .03em; text-transform: uppercase; line-height: 1.15; padding-top: 4px; }
+.price { font-family: var(--display); font-weight: 700; font-size: 22px; white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1; padding-top: 4px; }
+.price sup { font-size: .55em; vertical-align: top; position: relative; top: -.1em; margin-left: 1px; }
+.meta { font-size: 12.5px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.desc { margin: 0; color: #d6d6d6; font-size: 15.5px; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 11px; padding: 3px 9px; border-radius: 999px; border: 1px solid #555; color: #ddd; letter-spacing: .04em; }
+.sizes { display: grid; gap: 0; margin-top: 4px; }
+.size { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 0; border-top: 1px solid #262626; }
+.size span:first-child { color: #d6d6d6; font-size: 16px; }
+.size .price { font-size: 20px; }
+
+footer { max-width: 640px; margin: 0 auto; padding: 8px 16px 40px; text-align: center; color: #777; font-size: 12.5px; }
+.view[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) { .cat { transition: transform .15s ease; } .cat:active { transform: scale(.985); } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1><img class="logo" src="logo.png" alt="Caffè del Barrio, cocktails &amp; bar" width="434" height="434"><span class="sr-only">Caffè del Barrio</span></h1>
-    <div class="kicker">Drink list</div>
-    <p>Cocktail, gin tonic, spritz, birre e amari.</p>
-    <div class="rule">✦</div>
-  </header>
-
-  <div class="controls">
-    <label for="q" class="hidden">Cerca nel menù</label>
-    <input id="q" class="search" type="search" placeholder="Cerca un drink o un ingrediente (es. gin, menta)">
-    <nav class="chips" id="chips" aria-label="Sezioni del menù"></nav>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="back" id="back" type="button" aria-label="Torna alle categorie">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H5M11 5l-7 7 7 7"/></svg>
+      Indietro
+    </button>
+    <button class="brand" id="brand" type="button" aria-label="Caffè del Barrio, torna alla home"><img src="logo.png" alt="Caffè del Barrio" width="434" height="434"></button>
+    <span></span>
   </div>
+</header>
 
-  <main id="menu"></main>
-  <p class="empty" id="empty">Nessun drink corrisponde alla ricerca. Prova con un altro ingrediente.</p>
-
-  <footer>Prezzi in euro.<br>Chiedi pure al barman per varianti o drink senza alcol.</footer>
+<div class="view" id="home-hero">
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Caffè del Barrio</h1>
+      <p>cocktails &amp; bar</p>
+    </div>
+  </section>
 </div>
+
+<nav class="pills" aria-label="Categorie"><div class="pills-inner" id="pills"></div></nav>
+
+<main>
+  <div class="view" id="home"><div class="cats" id="cats"></div></div>
+  <div class="view" id="category" hidden>
+    <div class="cat-head"><h2 id="cat-title"></h2><p id="cat-sub"></p></div>
+    <div class="items" id="items"></div>
+  </div>
+</main>
+<footer>Prezzi in euro. Chiedi pure al barman per varianti o drink senza alcol.</footer>
 
 <script>
 const MENU = [
@@ -194,63 +197,85 @@ const MENU = [
     { n: "Acqua tonica", p: 3 }, { n: "Soda al limone", p: 3 }, { n: "Ginger beer", p: 3 },
   ]},
 ];
-const fmt = p => p == null ? "" : (Number.isInteger(p) ? String(p) : p.toFixed(2).replace(".", ","));
+const ICONS = {
+  cocktail: '<path d="M10 14h44L32 38z"/><path d="M32 38v16M22 56h20"/><circle cx="41" cy="20" r="3.5"/><path d="M41 16.5 47 8"/>',
+  spritz: '<path d="M20 8h24c0 14-4 24-12 24S20 22 20 8z"/><path d="M32 32v20M22 56h20"/><path d="M21 16h22"/><circle cx="44" cy="10" r="6"/><path d="M44 4v12M38 10h12"/>',
+  gintonic: '<path d="M18 10h28c3 10 2 22-14 26C16 32 15 20 18 10z"/><path d="M32 36v16M22 56h20"/><circle cx="27" cy="22" r="2"/><circle cx="36" cy="26" r="1.6"/><circle cx="33" cy="17" r="1.4"/><path d="M40 4l-6 14"/>',
+  distillati: '<path d="M16 22h32l-3 32H19z"/><rect x="23" y="34" width="9" height="9" rx="1.5" transform="rotate(-12 27 38)"/><rect x="33" y="38" width="8" height="8" rx="1.5" transform="rotate(10 37 42)"/><path d="M18 30h28"/>',
+  amari: '<path d="M27 6h10v8c0 3 6 6 6 12v28a3 3 0 0 1-3 3H24a3 3 0 0 1-3-3V26c0-6 6-9 6-12z"/><path d="M21 32h22v14H21z"/><path d="M27 10h10"/>',
+  spina: '<path d="M16 18h26v34a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4z"/><path d="M42 24h5a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5h-5"/><path d="M14 18c0-5 4-8 8-8 2-4 9-5 12-1 5-1 10 3 9 9"/><path d="M23 28v20M29 28v20M35 28v20"/>',
+  bottiglia: '<path d="M28 4h8v12c0 4 7 7 7 14v24a4 4 0 0 1-4 4H25a4 4 0 0 1-4-4V30c0-7 7-10 7-14z"/><path d="M21 34h22v12H21z"/><path d="M28 8h8"/>',
+  bibite: '<path d="M20 12h24v42a3 3 0 0 1-3 3H23a3 3 0 0 1-3-3z"/><path d="M22 8h20l2 4H20z"/><path d="M28 6c0-2 2-3 4-3"/><path d="M20 24h24M20 44h24"/>',
+};
+const CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
 
-const TAG_LABEL ={ zero: "analcolico", forte: "forte" };
-const menuEl = document.getElementById("menu");
-const chipsEl = document.getElementById("chips");
-const q = document.getElementById("q");
-const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+// Motivo di sfondo con icone da bar a linee sottili
+const PATTERN = `<svg xmlns="http://www.w3.org/2000/svg" width="260" height="180" viewBox="0 0 260 180" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<g transform="translate(14 14) scale(.8)">${ICONS.cocktail}</g>
+<g transform="translate(96 6) scale(.7)">${ICONS.spina}</g>
+<g transform="translate(176 20) scale(.75)">${ICONS.amari}</g>
+<g transform="translate(40 96) scale(.75)">${ICONS.gintonic}</g>
+<g transform="translate(130 92) scale(.8)">${ICONS.distillati}</g>
+<g transform="translate(206 104) scale(.65)">${ICONS.bibite}</g>
+<circle cx="80" cy="80" r="5"/><path d="M80 72v16M72 80h16" stroke-opacity=".18"/>
+<circle cx="170" cy="78" r="12"/><path d="M170 66v24M158 78h24M161.5 69.5l17 17M178.5 69.5l-17 17" stroke-opacity=".2"/>
+<path d="M118 158l3 3 3-3-3-3zM240 70l3 3 3-3-3-3zM16 76l2 2 2-2-2-2zM248 160h6M251 157v6M110 66h5M112.5 63.5v5"/>
+</svg>`;
+document.documentElement.style.setProperty("--pattern", `url("data:image/svg+xml,${encodeURIComponent(PATTERN)}")`);
 
-function render() {
-  menuEl.innerHTML = MENU.map(sec => `
-    <section id="${sec.id}" data-sec>
-      <h2>${esc(sec.title)} <span class="n">${String(sec.items.length).padStart(2, "0")}</span></h2>
-      ${sec.sub ? `<p class="sub">${esc(sec.sub)}</p>` : ""}
-      <div class="${sec.list ? "list" : ""}">
-        ${sec.items.map(it => `
-          <article class="item" data-text="${esc((it.n + " " + (it.i || "") + " " + (it.g || "") + " " + (it.t || []).join(" ")).toLowerCase())}">
-            <div class="top"><h3>${esc(it.n)}</h3><span class="dots"></span>${it.p != null ? `<span class="price">${fmt(it.p)}</span>` : ""}</div>
-            ${(it.g || it.i) ? `<p class="ing">${it.g ? `<span class="glass">${esc(it.g)}</span>` : ""}${it.g && it.i ? " · " : ""}${esc(it.i || "")}</p>` : ""}
-            ${it.sizes ? `<div class="sizes">${it.sizes.map(([l, p]) => `<div class="size"><span>${l}</span><span class="price">${fmt(p)}</span></div>`).join("")}</div>` : ""}
-            ${it.note ? `<p class="note">${esc(it.note)}</p>` : ""}
-            ${(it.t || []).length ? `<div class="tags">${it.t.map(t => `<span class="tag ${t === "zero" ? "zero" : t === "forte" ? "strong" : ""}">${TAG_LABEL[t] || t}</span>`).join("")}</div>` : ""}
-          </article>`).join("")}
-      </div>
-    </section>`).join("");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const price = p => { const [e, c] = p.toFixed(2).split("."); return `€ ${e}<sup>,${c}</sup>`; };
+const TAG = { zero: "analcolico", forte: "forte" };
 
-  chipsEl.innerHTML = `<button class="chip" id="chip-all" aria-pressed="true" data-target="all">Tutto</button>` +
-    MENU.map(s => `<button class="chip" id="chip-${s.id}" aria-pressed="false" data-target="${s.id}">${esc(s.title)}</button>`).join("");
+const pillsEl = document.getElementById("pills");
+pillsEl.innerHTML = MENU.map(s => `<button class="pill" type="button" data-id="${s.id}">${esc(s.title)}</button>`).join("");
+document.getElementById("cats").innerHTML = MENU.map(s => `
+  <button class="cat" type="button" data-id="${s.id}">
+    <div class="cat-art" aria-hidden="true"><div class="badge"><svg viewBox="0 0 64 64">${ICONS[s.id] || ICONS.cocktail}</svg></div></div>
+    <div class="cat-body">
+      <span class="cat-title">${esc(s.title)} ${CHEVRON}</span>
+      ${s.sub ? `<span class="cat-sub">${esc(s.sub)}</span>` : ""}
+      <span class="cat-count">${s.items.length} ${s.items.length === 1 ? "voce" : "voci"}</span>
+    </div>
+  </button>`).join("");
+
+function itemHTML(it) {
+  const meta = it.g ? `<div class="meta">${esc(it.g)}</div>` : "";
+  const desc = it.i ? `<p class="desc">${esc(it.i)}</p>` : "";
+  const sizes = it.sizes ? `<div class="sizes">${it.sizes.map(([l, p]) => `<div class="size"><span>${esc(l)}</span><span class="price">${price(p)}</span></div>`).join("")}</div>` : "";
+  const tags = (it.t || []).length ? `<div class="tags">${it.t.map(t => `<span class="tag">${TAG[t] || t}</span>`).join("")}</div>` : "";
+  const compact = !meta && !desc && !sizes && !tags;
+  return `<article class="item${compact ? " compact" : ""}">
+    <div class="item-top"><h3>${esc(it.n)}</h3>${it.p != null ? `<span class="price">${price(it.p)}</span>` : ""}</div>
+    ${meta}${desc}${sizes}${tags}
+  </article>`;
 }
 
-let active = "all";
-function apply() {
-  const term = q.value.trim().toLowerCase();
-  let shown = 0;
-  document.querySelectorAll("[data-sec]").forEach(sec => {
-    const secOk = active === "all" || sec.id === active;
-    let visible = 0;
-    sec.querySelectorAll(".item").forEach(it => {
-      const ok = secOk && (!term || it.dataset.text.includes(term));
-      it.classList.toggle("hidden", !ok);
-      if (ok) visible++;
-    });
-    sec.classList.toggle("hidden", visible === 0);
-    shown += visible;
-  });
-  document.getElementById("empty").style.display = shown ? "none" : "block";
+function show() {
+  const id = location.hash.slice(1);
+  const sec = MENU.find(s => s.id === id);
+  document.body.classList.toggle("in-cat", !!sec);
+  document.getElementById("home").hidden = !!sec;
+  document.getElementById("home-hero").hidden = !!sec;
+  document.getElementById("category").hidden = !sec;
+  pillsEl.querySelectorAll(".pill").forEach(b => b.setAttribute("aria-current", String(!!sec && b.dataset.id === sec.id)));
+  if (sec) {
+    document.getElementById("cat-title").textContent = sec.title;
+    document.getElementById("cat-sub").textContent = sec.sub || "";
+    document.getElementById("items").innerHTML = sec.items.map(itemHTML).join("");
+    const active = pillsEl.querySelector(`[data-id="${sec.id}"]`);
+    pillsEl.scrollTo({ left: active.offsetLeft - (pillsEl.clientWidth - active.offsetWidth) / 2, behavior: "smooth" });
+  }
+  window.scrollTo(0, 0);
 }
-
-render();
-chipsEl.addEventListener("click", e => {
-  const b = e.target.closest(".chip"); if (!b) return;
-  active = b.dataset.target;
-  chipsEl.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
-  apply();
-  window.scrollTo({ top: 0 });
+const go = id => { if (location.hash.slice(1) === id) show(); else location.hash = id; };
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-id]"); if (t) go(t.dataset.id);
 });
-q.addEventListener("input", apply);
-apply();
+document.getElementById("back").addEventListener("click", () => { history.replaceState(null, "", location.pathname); show(); });
+document.getElementById("brand").addEventListener("click", () => { history.replaceState(null, "", location.pathname); show(); });
+window.addEventListener("hashchange", show);
+show();
 </script>
 </body>
 </html>
